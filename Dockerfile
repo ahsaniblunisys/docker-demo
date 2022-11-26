@@ -1,8 +1,9 @@
-FROM ubuntu 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update 
-RUN sudo apt-get install apache2 
-RUN sudo apt-get install apache2-utils 
-RUN apt-get clean 
-EXPOSE 80
-CMD [“apache2ctl”, “-D”, “FOREGROUND”]
+FROM php:7.2-apache
+RUN a2enmod rewrite 
+RUN docker-php-ext-install pdo pdo_mysql
+RUN apt-get update \
+    && apt-get install -y libzip-dev \
+    && apt-get install -y zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install mysqli
